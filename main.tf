@@ -42,3 +42,47 @@ module "my_lambdas" {
     # Add more functions here...
   }
 }
+
+
+######################################################################################
+
+module "my_ec2" {
+  source = "./ec2-module"
+  
+  ec2_configuration = {
+    instance1 = {
+      instance_type        = "t2.micro"
+      ami_id               = "ami-123456"
+      key_name             = "my-key"
+      vpc_id               = "vpc-123456"
+      subnet_id            = "subnet-123456"
+      security_group_ids   = ["sg-123456"]
+      associate_public_ip  = true
+      root_block_device = {
+        volume_size = 30
+        volume_type = "gp2"
+      }
+      tags = {
+        Environment = "dev"
+        Role        = "web-server"
+      }
+    },
+    instance2 = {
+      instance_type        = "t2.small"
+      ami_id               = "ami-654321"
+      key_name             = "my-key"
+      vpc_id               = "vpc-654321"
+      subnet_id            = "subnet-654321"
+      security_group_ids   = ["sg-654321"]
+      associate_public_ip  = false
+      root_block_device = {
+        volume_size = 50
+        volume_type = "gp3"
+      }
+      tags = {
+        Environment = "prod"
+        Role        = "database"
+      }
+    }
+  }
+}
